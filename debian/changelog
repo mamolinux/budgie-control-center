@@ -1,3 +1,35 @@
+budgie-control-center (0.2) stable; urgency=medium
+
+  [ David Mohammed ]
+  * Partial revert of gresource changes back to gnome gresources and their calls from c module files have to match where they don't we get either blank panels or segfaults This revert changes everything back to gnome - its no harm leaving at a value of gnome since resource files are not installed into locations conflicting with gnome-control-center
+
+  [ Joshua Strobl ]
+  * Merge in Display / Screen oriented privacy options into Displays itself.
+
+  [ Marco Trevisan (Treviño) ]
+  * display: Support UI scaled logical monitor mode.
+    When this mode is selected we need to assume that all the monitors are scaled
+    by their scaling and the global UI scale.
+    Origin: https://gitlab.gnome.org/3v1n0/gnome-control-center/commits/layout-global-scale
+    Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/mutter/+bug/1820850
+    Forwarded: No, MPs will follow shortly
+    https://salsa.debian.org/gnome-team/gnome-control-center/-/raw/ubuntu/master/debian/patches/ubuntu/display-Support-UI-scaled-logical-monitor-mode.patch
+    https://salsa.debian.org/gnome-team/gnome-control-center/-/raw/ubuntu/master/debian/patches/ubuntu/display-Allow-fractional-scaling-to-be-enabled.patch
+
+  [ Joshua Strobl ]
+  * Conditionally show fractional scaling row / expose functionality if schema exists.
+    This ensures the option isn't exposed on operating systems which do not carry Mutter X11 xrandr fractional scaling patches. The only operating systems that do are Manjaro and Ubuntu.
+  * Enlarge OS logo in About / Details view.
+  * Update to promote Budgie version.
+    Requires BuddiesOfBudgie/budgie-desktop#6270dafa4f0dcfa508998d0f109e948834eaf152
+
+  [ David Mohammed ]
+  * Budgify pkgconfig otherwise we overwrite gnome-control-center pkgconfig file
+  * v0.2 release info
+  * Add helper file to make releases Since this project uses git submodules, for distros that build from tarballs - the tarball must contain the source for this subprojects i.e. they cannot use a git tag. Thus we need to publish formally a release containing signed tarballs.
+
+ -- Himadri Sekhar Basu <hsb10@iitbbs.ac.in>  Mon, 22 Jul 2024 01:02:13 +0530
+
 budgie-control-center (0.1) stable; urgency=medium
 
   * Initial debian release.

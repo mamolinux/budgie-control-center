@@ -1,3 +1,38 @@
+budgie-control-center (1.1.1) stable; urgency=medium
+
+  [ Dirk Su ]
+  * panels: wwan: Add WWAN 5G connection support
+
+  [ David Mohammed ]
+  * Add transifex and translation script support
+  * Add keyword _ for C files
+  * Extract C_ translations from ui files
+  * Parse desktop files with xgettext
+  * More comprehensive C string extraction
+  * Handle keybindings extraction
+  * Remember git submodules except for libhandy
+  * Generated pot file
+  * Use a reasonable minimum percentage for downloadable translations
+  * Correct number of plurals which stopped the upload
+  * Pull from transifex
+  * Latest translations
+  * Cleanup translations that do not meet the expected threshold
+  * Remove printer authentication title space from being translated - closes #35
+  * Latest translations
+  * Ensure VNC/RDP remote control settings is honored
+  * Latest es translation
+  * Rename pt to pt_PT, pull latest es
+  * Latest pt_PT
+
+  [ Campbell Jones ]
+  * Update background preview to look more like Budgie
+
+  [ David Mohammed ]
+  * Latest ru translation
+  * v1.1.1 version bump
+
+ -- Himadri Sekhar Basu <hsb10@iitbbs.ac.in>  Mon, 22 Jul 2024 01:44:18 +0530
+
 budgie-control-center (1.1.0) stable; urgency=medium
 
   [ Algent Albrahimi ]

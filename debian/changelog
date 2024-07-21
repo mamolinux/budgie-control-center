@@ -1,3 +1,40 @@
+budgie-control-center (1.4.0) stable; urgency=medium
+
+  [ Joshua Strobl ]
+  * Add CODEOWNERS
+  * Adjust codeowners to only specify Best Buds team
+
+  [ David Mohammed ]
+  * Update wacom tester to actually launch budgie-control-center
+
+  [ Evan Maddock ]
+  * Update appdata fields.
+    The translation URL linked to the GNOME Wiki for translations, which is not correct for this project. Also change the project group and desktop to Budgie.
+    Signed-off-by: Evan Maddock <maddock.evan@vivaldi.net>
+
+  [ David Mohammed ]
+  * Add the ability to toggle disabling touchpad whilst typing
+  * Replace deprecated license format
+
+  [ Pauli Virtanen ]
+  * subprojects: Update gvc.
+    Update libgnome-volume-control to latest. This fixes some crashes and
+    misbehavior.
+    See https://gitlab.gnome.org/GNOME/libgnome-volume-control/-/merge_requests/22
+    Fixes #1760
+
+  [ David Mohammed ]
+  * Update to gvc version to resolve occasional pipewire crashes when mute/unmute of microphone volume
+  * Latest translations
+  * Hide remote desktop sharing support since changes upstream integrate further into the gnome-stack such as GDM, gnome's xdg-portal etc
+  * support both sshd socket and services for remote login original author Alex Murray <alex.murray@canonical.com> Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnome-control-center/+bug/2039577
+  * Disable gnome-online-accounts due to latest upstream GOA changes Lets just hide GOA compilation due to online accounts moving to GTK4/libadwaita which breaks GTK3 based forks such as BCC https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/issues/291
+  * Add code and compilation option to support socket SSH based connections
+  * Latest translations
+  * Bump version
+
+ -- Himadri Sekhar Basu <hsb10@iitbbs.ac.in>  Mon, 22 Jul 2024 01:48:02 +0530
+
 budgie-control-center (1.3.0) stable; urgency=medium
 
   [ David Mohammed ]

@@ -1,3 +1,37 @@
+budgie-control-center (1.0.1) stable; urgency=medium
+
+  [ Ana Cabral ]
+  * network: Fix OWE settings.
+    Enhanced Open (OWE) is not being saved properly from connection-editor.
+    When we create a Wi-Fi connection using Enhanced Open (OWE) Security
+    from nm-connection-editor and save it, it was not being saved and the
+    security was being set as "None", with Wireless Security Setting
+    being discarded. This is fixed by this commit. The fix is also being
+    done in libnma (implementing OWE in libnma,
+    https://gitlab.gnome.org/GNOME/libnma/-/issues/9), but this commit
+    fixes meanwhile it gets ready.
+    It was solved by adding treatment for the case in which owe was set.
+    OWE is not treated anymore in the same case as None.
+    https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1521
+
+  [ David Mohammed ]
+  * Fix lintian reported typo
+
+  [ Evan Maddock ]
+  * Port: Add individual app icons.
+    This ensures that each panel has a usable symbolic icon. This also means that we don't have to rely on or worry about individual icon themes shipping (or not shipping) the icons that are needed for the panels, since it may no longer be guaranteed that they will exist in any given icon theme.
+    Original commit to GNOME Control Center: https://gitlab.gnome.org/GNOME/gnome-control-center/-/commit/13376ecb8b98762599bf54688cdf3afb3c25fbaf
+    Signed-off-by: Evan Maddock <maddock.evan@vivaldi.net>
+
+  [ Campbell Jones ]
+  * Reorganize directories to match budgie-desktop
+
+  [ David Mohammed ]
+  * Bump microrelease
+  * Correct build issues with documentation meson option/disable wayland building as a default
+
+ -- Himadri Sekhar Basu <hsb10@iitbbs.ac.in>  Mon, 22 Jul 2024 01:28:49 +0530
+
 budgie-control-center (1.0.0) stable; urgency=medium
 
   [ Aleksandr Melman ]

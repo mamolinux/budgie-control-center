@@ -1,3 +1,490 @@
+budgie-control-center (1.1.0) stable; urgency=medium
+
+  [ Algent Albrahimi ]
+  * Edit typo in bug_report template
+
+  [ David Mohammed ]
+  * Fix typo in feature template #20
+
+  [ Campbell Jones ]
+  * Remove Python from dependencies
+
+  [ David Mohammed ]
+  * Ensure buddies gresource includes sound test icons - closes #23
+
+  [ Mejans ]
+  * small typo
+
+  [ Juliano de Souza Camargo ]
+  * Update Portuguese translation
+
+  [ Hugo Carvalho ]
+  * Update Portuguese translation
+  * Update Portuguese translation
+
+  [ Felipe Borges ]
+  * info-overview: Allow changing "Device Name" by pressing "Enter"
+    The hostname/device name dialog has only a GtkEntry. So a user
+    navigating with only a keyboard should be able to apply their
+    changes by pressing "Enter".
+
+  [ Kjartan Maraas ]
+  * Update Norwegian Bokmål translation
+  * Update Norwegian Bokmål translation
+
+  [ Rafael Fontenelle ]
+  * Update Brazilian Portuguese translation
+
+  [ sicklylife ]
+  * Update Japanese translation
+
+  [ Bastien Nocera ]
+  * wacom: Print errors for libwacom_new_from_*() calls.
+    This helps with debugging.
+  * wacom: Split off notebook switching for detected stylus.
+    This will reduce code duplication for mocking styli.
+  * wacom: Add a fake stylus when mocking a tablet
+  * wacom: Add scenario tester.
+    Running the helper will launch gnome-control-center with a mocked Wacom
+    Cintiq tablet through umockdev when one isn't present or easily available.
+    The Cintiq was selected as it will trigger showing all the different
+    buttons Wacom tablets can make the panel spawn.
+
+  [ Michael Catanzaro ]
+  * network: fix critical when opening VPN details page.
+    I was seeing this critical when opening the VPN details page:
+    (gnome-control-center:78888): nm-CRITICAL **: 16:26:21.689: ((src/libnm-client-impl/nm-device.c:1299)): assertion '<dropped>' failed
+    It probably broke in 551d72280bbc9479a81697e2d888a77a64538b27. The code
+    above and below expects self->device may be NULL, so let's add a
+    NULL check here.
+
+  [ Victor Toso ]
+  * common: Fix leak of GUdevDevice.
+    The add_device() check for g_udev_device_get_parent() was leaking (see
+    below). As this is actually used in create_device(), I'm passing it as
+    argument to avoid a second call to that function.
+     > 34,175 (1,080 direct, 33,095 indirect) bytes in 27 blocks are definitely lost in loss record 19,729 of 19,758
+     >    at 0x4A7A337: g_type_create_instance (gtype.c:1907)
+     >    by 0x4A61CAC: g_object_new_internal (gobject.c:1945)
+     >    by 0x4A62C7C: g_object_new_with_properties (gobject.c:2114)
+     >    by 0x4A63780: g_object_new (gobject.c:1785)
+     >    by 0x5EA5A6A: _g_udev_device_new (gudevdevice.c:132)
+     >    by 0x4B6D24: add_device (gsd-device-manager.c:447)
+     >    by 0x4B6FBF: gsd_device_manager_init (gsd-device-manager.c:517)
+     >    by 0x4A7A288: g_type_create_instance (gtype.c:1929)
+     >    by 0x4A61CAC: g_object_new_internal (gobject.c:1945)
+     >    by 0x4A62C7C: g_object_new_with_properties (gobject.c:2114)
+     >    by 0x4A63780: g_object_new (gobject.c:1785)
+     >    by 0x4B7075: gsd_device_manager_get (gsd-device-manager.c:533)
+  * keyboard-manager: fix leak of section list store
+    ==25729== 1,058 (40 direct, 1,018 indirect) bytes in 1 blocks are definitely lost in loss record 20,104 of 20,657
+    ==25729==    at 0x484086F: malloc (vg_replace_malloc.c:380)
+    ==25729==    by 0x4AF77A8: g_malloc (gmem.c:106)
+    ==25729==    by 0x4B0F1E4: g_slice_alloc (gslice.c:1072)
+    ==25729==    by 0x4B09060: UnknownInlinedFun (gsequence.c:1609)
+    ==25729==    by 0x4B09060: g_sequence_insert_before (gsequence.c:527)
+    ==25729==    by 0x4ED2FE7: gtk_list_store_insert (gtkliststore.c:1271)
+    ==25729==    by 0x4A5DCE: append_section (cc-keyboard-manager.c:363)
+    ==25729==    by 0x4A605D: append_sections_from_file (cc-keyboard-manager.c:431)
+    ==25729==    by 0x4A6766: reload_sections (cc-keyboard-manager.c:568)
+    ==25729==    by 0x4A6D33: cc_keyboard_manager_load_shortcuts (cc-keyboard-manager.c:706)
+    ==25729==    by 0x4A2FA4: cc_keyboard_shortcut_dialog_init (cc-keyboard-shortcut-dialog.c:841)
+    ==25729==    by 0x4A7A288: g_type_create_instance (gtype.c:1929)
+    ==25729==    by 0x4A61CAC: g_object_new_internal (gobject.c:1945)
+  * keyboard-item: fix leak on unused CcKeyCombo
+    ==31571== 288 bytes in 24 blocks are definitely lost in loss record 18,138 of 19,290
+    ==31571==    at 0x484086F: malloc (vg_replace_malloc.c:380)
+    ==31571==    by 0x4AF77A8: g_malloc (gmem.c:106)
+    ==31571==    by 0x4A4119: variant_get_key_combos (cc-keyboard-item.c:475)
+    ==31571==    by 0x4A41FD: settings_get_key_combos (cc-keyboard-item.c:498)
+    ==31571==    by 0x4A46BE: cc_keyboard_item_load_from_gsettings (cc-keyboard-item.c:574)
+    ==31571==    by 0x4A5BBB: append_section (cc-keyboard-manager.c:315)
+    ==31571==    by 0x4A605D: append_sections_from_file (cc-keyboard-manager.c:431)
+    ==31571==    by 0x4A6766: reload_sections (cc-keyboard-manager.c:568)
+    ==31571==    by 0x4A6D68: cc_keyboard_manager_load_shortcuts (cc-keyboard-manager.c:707)
+    ==31571==    by 0x4A2FA4: cc_keyboard_shortcut_dialog_init (cc-keyboard-shortcut-dialog.c:841)
+    ==31571==    by 0x4A7A288: g_type_create_instance (gtype.c:1929)
+    ==31571==    by 0x4A61CAC: g_object_new_internal (gobject.c:1945)
+  * keyboard-shortcut-editor: fix leak of accel string
+    ==31571== 120 bytes in 8 blocks are definitely lost in loss record 17,034 of 19,290
+    ==31571==    at 0x484086F: malloc (vg_replace_malloc.c:380)
+    ==31571==    by 0x4AF77A8: g_malloc (gmem.c:106)
+    ==31571==    by 0x4D9816A: gtk_accelerator_name (gtkaccelgroup.c:1577)
+    ==31571==    by 0x4A82D1: setup_custom_shortcut (cc-keyboard-shortcut-editor.c:364)
+    ==31571==    by 0x4A92DF: cc_keyboard_shortcut_editor_key_press_event (cc-keyboard-shortcut-editor.c:745)
+
+  [ Colin Watson ]
+  * datetime: Remove tzname_daylight.
+    The code that set it could only ever have worked by luck in some
+    timezones on some systems, and there's no API to obtain the information
+    we were trying to store in it.  Nothing uses it, so there's no point
+    trying to fix it.
+    tzname_normal is also unused, but slightly useful for debugging, so
+    rename it to tzname but otherwise keep it in place.
+
+  [ Alexander Mikhaylenko ]
+  * ua: Use the new high contrast key.
+    Keep setting gtk theme, but use the new boolean as the source of truth.
+
+  [ Bastien Nocera ]
+  * build: Bump required gsettings-desktop-schemas version.
+    For the colour scheme option.
+
+  [ Benjamin Berg ]
+  * network: Fix saving passwords for non-wifi connections.
+    When validating security settings for non-wifi connections, we
+    temporarily create a wireless connection. Unfortunately, when this
+    connection is destroyed, it'll clear the stored password from the 802.1x
+    settings object.
+    Avoid this by removing the setting before the temporary connection is
+    destroyed. (Closes: #337)
+
+  [ Robert Mader ]
+  * display: Always show refresh rate.
+    Refresh rates are an important information for users, even if they
+    can't change them.
+    This is especially true for cases where knowledge of the refresh
+    rate may influence the decission about the resolution to use.
+    Consider the example where a display may support `3840x2160@60Hz`
+    and `2560x1440@144Hz`. When choosing `3840x2160` as resolution,
+    the refresh rate will likely get hidden, making the user unaware
+    of the fact that they will maybe not get what they want (potentially
+    144Hz).
+    So follow the example of e.g. the sound panel where input and output
+    devices are listed in dropdowns, even if they are the only options
+    selectable.
+    Note: while this is a design change, for a big group of users this
+    won't actually change the default experience as Mutter until recently
+    had a bug to duplicate 60Hz modes in many cases. So most laptop users
+    already saw the refresh rate panel in previous Gnome versions,
+    dispite it having little use.
+    See also:
+    https://gitlab.gnome.org/GNOME/mutter/-/commit/fb9564b87b9fe8ebc5a19c20dbfe036995d0dbad
+
+  [ Pablo Correa Gómez ]
+  * wwan: Make sure secrets are set when querying connection APN password.
+    Otherwise the comparison in wwan_data_apn_are_same will always be False
+    due to nm_setting_gsm_get_password always returning NULL.
+    Helps #1468
+    Relates !1059
+
+  [ Carlos Garnacho ]
+  * wacom: Allow NULL monitors in calibration.
+    Unfortunately, this may be the case, it is better to show wonky UI
+    than no UI at all.
+  * wacom: Explicitly discard input from touchscreens.
+    Closes: https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1612
+
+  [ Georges Basile Stavracas Neto ]
+  * applications: Properly protect against NULL app_id.
+    The 'app_id' variable can be NULL, and g_str_has_prefix() does
+    not particularly enjoy that.
+  * applications: Switch to g_spawn_check_wait_status()
+    It's the undeprecated version of g_spawn_check_exit_status().
+
+  [ David Mohammed ]
+  * color: Remove profile upload feature As it was already removed in colord itself: https://github.com/hughsie/colord/commit/98f83acc910f527496fc149511c9dfa35f954be9#diff-cb19 db05cc548372b27ebee7d47bc00b6788ad05da6f5d7fff107c45bbfba38f.
+    This removes the only direct libsoup 2.x dependency in
+    budgie-control-center.
+    Origin: GCC, 42~beta1, commit:a9c398e5d9d45fb4638b38d6bb3f677a2b12b249
+    Orig Author: Bastien Nocera <hadess@hadess.net>
+    Orig Date: Thu, 18 Nov 2021 16:39:44 +0100
+  * info: Use udev to get the hardware RAM size libgtop gets the RAM size as is visible to the OS, so the physical RAM size minus all the reserved areas listed at the top of your usual Linux dmesg output.
+    Use systemd 248's MEMORY_ARRAY_* properties attached to the pseudo-DMI
+    device to get the size of the RAM sticks/chips as the user expects.
+    Close upstream 1540
+    Origin: https://gitlab.gnome.org/GNOME/gnome-control-center/-/commit/25518a6
+    Orig Author: Bastien Nocera <hadess@hadess.net>
+    Orig Date: Tue, 25 Jan 2022 23:12:58 +0100
+  * display: Only display configuration options if apply is allowed org.gnome.Mutter.DisplayConfig contains a new property that tells whether apply will be allowed to be called or not. Whether it is true or not depends on policy stored in any of its monitors.xml configuration files.
+    In order to make it clearer that configuration is not possible, except
+    for night light, make sure to hide the unconfigurable parts, leaving
+    only night light.
+    Origin: https://gitlab.gnome.org/GNOME/gnome-control-center/-/commit/21862c3
+    Original Author: Jonas Dahl <jadahl@gmail.com>
+    Original Date: Thu, 20 Jan 2022 10:58:23 +0100
+  * [PATCH 01/13] sharing: Port Screen Sharing dialog to RDP Also following the guidelines at https://gitlab.gnome.org/Teams/Design/settings-mockups/-/raw/master/remote-desktop/remote-desktop.png.
+    Fixes upstream 1413
+    Author Felipe Borges <felipeborges@gnome.org>
+    Date Thu, 10 Feb 2022 13:03:21 +0100
+    Modified Robert Ancell https://salsa.debian.org/gnome-team/gnome-control-center/-/commit/1e67b13736ab2c0714ce2701429afd51ed010007
+  * [PATCH 02/13] sharing: Add TLS certificate generation implementation This copies TLS certificate generation implementation from https://gitlab.gnome.org/chergert/bonsai. No changes were made other than ones required for making it build as part of gnome-control-center's sharing panel. It's currently not suitable to depend on libbonsai, as it will likely see big changes before seeing a release. Author jadahl@gmail.com Date Mon, 21 Feb 2022 18:36:33 +0100 Modified Robert Ancell https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/sharing-rdp/debian/patches/ubuntu/sharing-rdp/0002-sharing-Add-TLS-certificate-generation-implementatio.patch
+    [PATCH 03/13] sharing/tls: Change expiration timeout to 2 years
+    It was 5 years; shorten it to 2 years.
+    https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/sharing-rdp/debian/patches/ubuntu/sharing-rdp/0003-sharing-tls-Change-expiration-timeout-to-2-years.patch
+  * [PATCH 04/13] sharing: Generate RDP TLS certificates when missing This also hooks up the certificate verification dialog to the configured TLS certificate. Author jadahl@gmail.com Date: Tue, 22 Feb 2022 10:30:07 +0100 Modified Robert Ancell https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/sharing-rdp/debian/patches/ubuntu/sharing-rdp/0004-sharing-Generate-RDP-TLS-certificates-when-missing.patch
+  * [PATCH 05/13] sharing/remote-login: Move systemd unit management into helper This will make it possible to reuse elsewhere, including for user services. Author jadahl@gmail.com Date: Wed, 23 Feb 2022 11:29:26 +0100 Modified Robert Ancell https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/sharing-rdp/debian/patches/ubuntu/sharing-rdp/0005-sharing-remote-login-Move-systemd-unit-management-in.patch
+  * [PATCH 06/13] sharing/systemd-service: Add is_active() helper Checks whether a service is both enabled and running. Author jadahl@gmail.com Date: Wed, 23 Feb 2022 18:25:52 +0100 Modified Robert Ancell https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/sharing-rdp/debian/patches/ubuntu/sharing-rdp/0006-sharing-systemd-service-Add-is_active-helper.patch
+  * [PATCH 07/13] sharing/remote-desktop: Use systemd directly to manage service This means we no longer rely on gsd-sharing to disable/enable the remote desktop service depending on the current connected network. Author jadahl@gmail.com Date: Wed, 23 Feb 2022 18:34:05 +010 Modified Robert Ancell https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/sharing-rdp/debian/patches/ubuntu/sharing-rdp/0007-sharing-remote-desktop-Use-systemd-directly-to-manag.patch
+  * [PATCH 08/13] sharing/remote-desktop: Add copy buttons Author jadahl@gmail.com Date: Wed, 23 Feb 2022 18:52:33 +0100 Modified Robert Ancell https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/sharing-rdp/debian/patches/ubuntu/sharing-rdp/0008-sharing-remote-desktop-Add-copy-buttons.patch
+  * [PATCH 09/13] sharing/remote-desktop: Hook up to explicit enable setting Enabling the service isn't enough, one also needs to enable the relevant backend. Author jadahl@gmail.com Date: Fri, 25 Feb 2022 19:01:53 +0100 Modified Robert Ancell https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/sharing-rdp/debian/patches/ubuntu/sharing-rdp/0009-sharing-remote-desktop-Hook-up-to-explicit-enable-se.patch
+  * [PATCH 10/13] sharing/remote-desktop: Initialize username/password if not set If no password or username was set (not even an empty one), initialize them to something, specifically the username of the user of the session, and a auto generated password. Author jadahl@gmail.com Date: Fri, 25 Feb 2022 21:13:21 +0100 Modified Robert Ancell https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/sharing-rdp/debian/patches/ubuntu/sharing-rdp/0010-sharing-remote-desktop-Initialize-username-password-.patch
+  * [PATCH 11/13] sharing/remote-desktop: Only try to enable the RDP backend Turning off the service doesn't mean we need to disable the RDP backend, the setting can stay enabled in case one wants to manage it directly via systemd. Author jadahl@gmail.com> Date: Thu, 3 Mar 2022 16:55:15 +0100 [PATCH 12/13] sharing/systemd-service: Treat 'static' state as  enabled Quoting the documentation:
+    > static indicates that the unit is statically enabled, i.e. always
+    > enabled and doesn't need to be enabled explicitly
+  * [PATCH 13/13] sharing: Remove leftover remote_desktop_password_insert_text_cb This method is unused and was left behind after the rework in commit 0ae59467fbd694d59fa367a0621de2482f169f44.
+    Fixes upstream 1703
+    Modified Robert Ancell
+    https://salsa.debian.org/gnome-team/gnome-control-center/-/blob/ubuntu/sharing-rdp/debian/patches/ubuntu/sharing-rdp/0013-sharing-Remove-leftover-remote_desktop_password_inse.patch
+  * Add missing source files For some unknown reasons whilst merging the rdp patches two sharing source files were not committed.  Adding these via a -f force enables these files to be committed - the error message by git says a .gitignore file prevents these files. Why - not sure.  Needs investigating
+  * Use gnome-control-center .gitignore
+
+  [ Joshua Strobl ]
+  * Enable setting a dark distributor logo for Fedora.
+    If this is set and a dark theme is used, we will set from the filepath provided. Otherwise we will use our normal array and icon-based behavior.
+  * Move some items out to fix some fallback.
+
+  [ David Mohammed ]
+  * sharing-panel: Make possible to control and configure VNC settings Upstream sharing panel only supports RDP, but we also want to keep compatibility with older VNC protocol, so that previous settings are kept and migrated, while it's still possible to configure the backend.
+    Password is now shared by the two backends, even though the VNC one
+    limits its length.
+    Author: mail@3v1n0.net
+    Date Wed, 13 Apr 2022 08:21:27 +0200
+    Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnome-control-center/+bug/196851
+  * [PATCH] sharing: Fix Remote Desktop on switch handling Previously, we were only checking if the gnome-remote-desktop user service was running but that service is always running as of https://gitlab.gnome.org/GNOME/gnome-remote-desktop/-/commit/7f4ef31fd38.
+    We need to check the gsettings key too.
+    Closes: https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1775
+    https://gitlab.gnome.org/GNOME/gnome-control-center/-/merge_requests/1286
+    Author Jeremy Bicha <jeremy.bicha@canonical.com>
+    Date: Wed, 20 Apr 2022 13:24:42 -0400
+  * Rework fractional scaling to disable the lock-screen GNOME/Budgie screensaver goes into a flash loop when fractional scaling options are used.  This leads to a unusable desktop that is difficult to unlock. For a quick-win this commit disables the lock screen when fractional scaling is being used. Future work will be required to debug the screensaver and why it breaks.
+  * Fix lintian typo in man page
+
+  [ Joshua Strobl ]
+  * Remove unused keybindings file.
+
+  [ David Mohammed ]
+  * sharing: Turn off RDP gsettings key when turning off RDP Closes: https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1825 Bug-Ubuntu: https://launchpad.net/bugs/1971415 (cherry picked from commit f94c96577bf375a8f5d4c978577acf565512ccaf)
+  * sharing: Turn off VNC gsettings key when turning off VNC CVE-2022-1736 https://launchpad.net/bugs/1971415
+
+  [ Ian Douglas Scott ]
+  * keyboard: Avoid segfault due to no "data" for `custom_shortcut_add_row`
+    Ultimately it would be good to get rid of the use of
+    `g_object_set_data`/`g_object_get_data` here, but this works for now.
+    Fixes https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1373.
+
+  [ Norbert Pfeiler ]
+  * info-overview: Remove trailing space after CPU name.
+    It was apparent when selecting the text, as the text is right aligned.
+    »AMD® Ryzen threadripper 1950x 16-core processor × 32 «
+    ↓
+    »AMD® Ryzen threadripper 1950x 16-core processor × 32«
+
+  [ David Mohammed ]
+  * Revert "Add sound overdrive capability in the sound tab."
+    This reverts commit 51a6caf969da5990fcf9f1b14ac775361e987704.
+  * Rework sound overamplication patch to be frame friendly - Closes #13 Uses v41.7 ubuntu sound patch as a basis, merges in budgie specifics such as the schema and key name
+  * Resolve thumbnail API change #31
+
+  [ Jakub Steiner ]
+  * fingerprinting: out of style graphics
+    - use the geometric shapes of the [illustration
+      style](https://gitlab.gnome.org/Teams/Design/app-illustrations/)
+      for the graphical assets.
+    Fixes https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1424
+
+  [ 1pav ]
+  * window: Save application window state.
+    Currently the window state (width, height, maximized) is not preserved
+    across application restarts.
+    These changes implement window state saving/restoring by leveraging the
+    GSettings API.
+    Fixes https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1293
+
+  [ Guido Günther ]
+  * shell: Mirror the main leaflet's 'folded' property.
+    This makes it simpler for panels to check whether g-c-c
+    is in folded state.
+  * display: Use ComboBox when folded.
+    On small window sizes the ButtonBox can overflow the panel. This is
+    especially true in single display mode when no other elemnts prevent
+    shrinking to e.g. 360px width on phones. Use the ComboBox introduced in
+    632cb3c907922d4449e5758d218612ad5d8735c6 in these cases.
+    For that we introduce cc_display_settings_refresh_layout() to refresh
+    the layout when the folded state changes. This can later on be used for
+    more tweaks to shrink to smaller sizes.
+
+  [ grumpey ]
+  * Use proper unicode ellipses in strings.
+    Fixes: #1458
+
+  [ David Mohammed ]
+  * Displays: Expand row subtitles to a second line The HdyActionRow subtitle usually contains a longer description of the preference/option relative to the widget. Depending on the language used, the label could get long and unreadable (ellipsized). Use the Hdy "subtitle-lines" property to tackle this specific issue.
+
+  [ Felipe Borges ]
+  * multitasking: Expand row subtitles to a second line.
+    Depending on the language used, the label could get long and
+    unreadable (ellipsized).
+    Fixes #1486
+
+  [ Bastien Nocera ]
+  * build: Add script to detect files in XDG_DATA_DIRS
+    meson doesn't have support for doing this, so use Python and just the
+    stdlib to find files under XDG_DATA_DIRS and XDG_DATA_HOME.
+  * build: Check for polkit supplementary files.
+    Which are shipped in newer versions of polkit, as well as backported in
+    older versions of Ubuntu, rather than hardcoding a newer version of
+    polkit and expecting newcomers to know to downgrade the version
+    requirement.
+    Fixes: 9ebcd17236a54daa0927a22d973d0309dfb4c8df
+
+  [ Chingkai Chu ]
+  * user-accounts: Make autologin_switch a activatable_widget.
+    If we don't add this property for autologin_row, the shortcut to
+    toggle the GtkSwitch won't work.
+    See: https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1501
+
+  [ Tejal Palwankar ]
+  * wifi: Fixed plural handling for different languages.
+    Fixes #1463
+
+  [ zhuyaliang ]
+  * printers: Add adjust printer task priority button.
+    Add a new  button to the 'PpJobRow',This button can adjust the priority of tasks in the print queue to the highest
+
+  [ Victor Toso ]
+  * keyboard-manager: fix leak of section list store
+    ==25729== 1,058 (40 direct, 1,018 indirect) bytes in 1 blocks are definitely lost in loss record 20,104 of 20,657
+    ==25729==    at 0x484086F: malloc (vg_replace_malloc.c:380)
+    ==25729==    by 0x4AF77A8: g_malloc (gmem.c:106)
+    ==25729==    by 0x4B0F1E4: g_slice_alloc (gslice.c:1072)
+    ==25729==    by 0x4B09060: UnknownInlinedFun (gsequence.c:1609)
+    ==25729==    by 0x4B09060: g_sequence_insert_before (gsequence.c:527)
+    ==25729==    by 0x4ED2FE7: gtk_list_store_insert (gtkliststore.c:1271)
+    ==25729==    by 0x4A5DCE: append_section (cc-keyboard-manager.c:363)
+    ==25729==    by 0x4A605D: append_sections_from_file (cc-keyboard-manager.c:431)
+    ==25729==    by 0x4A6766: reload_sections (cc-keyboard-manager.c:568)
+    ==25729==    by 0x4A6D33: cc_keyboard_manager_load_shortcuts (cc-keyboard-manager.c:706)
+    ==25729==    by 0x4A2FA4: cc_keyboard_shortcut_dialog_init (cc-keyboard-shortcut-dialog.c:841)
+    ==25729==    by 0x4A7A288: g_type_create_instance (gtype.c:1929)
+    ==25729==    by 0x4A61CAC: g_object_new_internal (gobject.c:1945)
+
+  [ Bastien Nocera ]
+  * power: Remove support for power-profiles-daemon < 0.9.0
+  * power: Fix launching upower from scenario tester.
+    Not everyone would have upower built under jhbuild, so use the system
+    one if we can't find it.
+  * power: Add scenario for a 2nd non-charging laptop battery
+  * power: Fix scenario tester running upowerd under jhbuild.
+    A logic error meant that the systemd upowerd would always be used.
+
+  [ Norbert Pfeiler ]
+  * info-overview: There is no “AMD®”
+    AMD doesn’t have a registered trademark for the string only.
+  * info-overview: If names are all caps, leave them be.
+    This made everything AMD lower case after the second word
+    and is likely unintentional for something like EPYC™.
+    e.g. was
+    AMD Ryzen threadripper 1950x 16-core processor
+    AMD Radeon rx 580 series
+  * info-overview: Always omit Gallium, not just for AMD
+  * info-overview: Use a more generic regex to match the Mesa infos
+  * info-overview: Replace the trademark symbols in a more generic way
+  * info-overview: Remove some junk info, like PCIe and SSE
+  * info-overview: Remove redundant/elaborate info.
+    Remove redundant/elaborate in strings like CPU, Core and Processor.
+  * info-overview: Remove some rare @ x.yz GHz specification
+  * info-overview: Add some commonly used trademarks.
+    Those are not always present in the device string.
+    Guidance was taken from the usage on vendor websites.
+    NVIDIA actually has the rights to GTX™ but doesn’t seem to use it,
+    in contrast to RTX™.
+  * info-overview: Replace llvmpipe with “Software Rendering”
+
+  [ Bastien Nocera ]
+  * shell: Initialise locale early.
+    Otherwise glib will make internal calls before setlocale is called:
+    ** (process:1124144): WARNING **: 10:16:58.983: dcgettext("(null)", "", 5) called before setlocale()
+     #0  0x00007ffff7c80f77 in g_logv () at /lib64/libglib-2.0.so.0
+     #1  0x00007ffff7c81233 in g_log () at /lib64/libglib-2.0.so.0
+     #2  0x00007ffff7fbb6c6 in dcgettext (__domainname=<optimized out>, __msgid=0x7ffff7ce6c5a "", __category=<optimized out>) at ../../../../Projects/jhbuild/gettext-pseudolocale/gettext-pseudolocale.c:194
+     #3  0x00007ffff7c6478e in _g_dgettext_should_translate () at /lib64/libglib-2.0.so.0
+     #4  0x00007ffff7c6484b in g_dgettext () at /lib64/libglib-2.0.so.0
+     #5  0x00007ffff7e98974 in g_application_class_intern_init () at /lib64/libgio-2.0.so.0
+     #6  0x00007ffff7d9cfb8 in g_type_class_ref () at /lib64/libgobject-2.0.so.0
+     #7  0x00007ffff7d9cc95 in g_type_class_ref () at /lib64/libgobject-2.0.so.0
+     #8  0x00007ffff7d9cc95 in g_type_class_ref () at /lib64/libgobject-2.0.so.0
+     #9  0x00007ffff7d9cc95 in g_type_class_ref () at /lib64/libgobject-2.0.so.0
+     #10 0x00007ffff7d8671a in g_object_new_valist () at /lib64/libgobject-2.0.so.0
+     #11 0x00007ffff7d867fd in g_object_new () at /lib64/libgobject-2.0.so.0
+     #12 0x0000000000449bcc in cc_application_new () at ../../../../Projects/jhbuild/gnome-control-center/shell/cc-application.c:294
+     #13 0x0000000000448fa6 in main (argc=1, argv=0x7fffffffd138) at ../../../../Projects/jhbuild/gnome-control-center/shell/main.c:55
+
+  [ Robert Ancell ]
+  * user-accounts: Replace deprecated g_spawn_check_exit_status
+  * info-overview: Replace deprecated g_spawn_check_exit_status
+
+  [ Bastien Nocera ]
+  * network: Fix Wi-Fi network with "&" in name not appearing.
+    My neighbours' Wi-Fi makes the Wi-Fi panel throw an error:
+    (gnome-control-center:346639): Gtk-WARNING **: 15:16:21.993: Failed to set text 'Bbox Hugo & Laura' from markup due to error parsing markup: Error on line 1: Entity did not end with a semicolon; most likely you used an ampersand character without intending to start an entity — escape ampersand as &amp;
+    Escape the SSID before using it to set the label.
+
+  [ Amy ]
+  * default-apps: switch away from deprecated function
+    cc-default-apps-panel.c:101 uses g_pattern_match_string, which is now
+    considered deprecated in Glib. It is better to use the 2.70+
+    g_pattern_spec_match_string, which works as a drop-in replacement. This
+    helps with function organization, as the original was created as a
+    general Glib function while g_pattern_spec_match_string works under the
+    PatternSpec module.
+    This patch swaps the usage to the newer function, creating no functional
+    difference and resolving a deprecated functions warning.
+  * Update GLib dependency to 2.70.
+    To support commit 9de5b003, the minimum GLib dependency level must be
+    updated to 2.70 as that release introduced g_pattern_spec_match_string.
+    This patch updates the GLib minimum required level in accordance.
+
+  [ David Bauer ]
+  * network: implement handling for OWE TM.
+    Implement handling for OWE-TM networks.
+     * Correctly display encryption type when connected to a OWE-TM network
+       with an open profile (Previously showed as WPA2
+     * Mask out hidden transition SSID when connected to the OWE-TM network
+     * Don't display OWE-TM network with lock icon
+    Signed-off-by: David Bauer <mail@david-bauer.net>
+
+  [ Amy ]
+  * network: prevent crash by disconnecting device.
+    When a device is registered with add_wifi_device, a corresponding signal
+    is registered for events. The associated remove_wifi_device clears the
+    associated pages, but does not disconnect the signal. This causes the
+    assertion NET_IS_DEVICE_WIFI to fail.
+    This patch corrects this error, resolving #1889 as per the suggested fix
+    from Benjamin (@bberg). 
+  * network: fix line break issues.
+    Commit 5e0fc5c1 ("network: prevent crash by disconnecting device")
+    introduced two new line breaks after the final call of
+    remove_wifi_device. Those line breaks are unnecessary, as pointed out by
+    Robert (@robert.ancell). They should be removed for the MR to be merged.
+    This patch removes those line breaks, which should allow for !1359 to be
+    properly merged.
+
+  [ Robert Ancell ]
+  * network: Replace deprecated nm_device_disconnect
+  * wwan: Replace deprecated nm_device_disconnect
+  * network: Replace deprecated nm_client_deactivate_connection
+  * network: Replace deprecated nm_client_wireless_set_enabled
+
+  [ Lubomir Rintel ]
+  * wwan: do not insist SIM ID being present.
+    It is perfectly possible for mm_sim_dup_identifier() to return NULL if
+    the SIM ID wasn't provided by the modem for any reason, leading to an
+    assertion failure:
+      (gnome-control-center:910641): cc-wwan-data-CRITICAL **: 12:43:51.573:
+        cc_wwan_data_set_default_apn: assertion 'self->sim_id != NULL' failed
+    Handle the NULL SIM ID gracefully.
+
+  [ David Mohammed ]
+  * Bump release version to v1.1.0
+  * Pull the latest gvc project source
+  * Bump mkrelease version
+
+  [ Algent Albrahimi ]
+  * Edit typo in bug_report template
+
+ -- Himadri Sekhar Basu <hsb10@iitbbs.ac.in>  Mon, 22 Jul 2024 01:42:55 +0530
+
 budgie-control-center (1.0.1) stable; urgency=medium
 
   [ Ana Cabral ]

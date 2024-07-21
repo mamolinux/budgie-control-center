@@ -1,3 +1,165 @@
+budgie-control-center (1.2.0) stable; urgency=medium
+
+  [ Campbell Jones ]
+  * Add click method to touchpad settings
+
+  [ David Mohammed ]
+  * Display fingerprint user row if there is a valid fingerprint device connected
+  * Don't need to find the fingerprint status upfront
+  * Display fingerprint icons from the resource file
+  * Ensure view layout icon is displayed for region panel
+  * Revert "Ensure view layout icon is displayed for region panel"
+    This reverts commit 92deaa8bee5a74cb91530e987ad74449aad8d08d.
+  * Add fprintd message to dialog
+  * Add translation changes
+  * No need to autofree a pointer
+  * Cleanup code
+  * Latest translations
+  * Latest ja translation
+
+  [ Evan Maddock ]
+  * Add keybind for the Budgie Power Dialog.
+    Signed-off-by: Evan Maddock <maddock.evan@vivaldi.net>
+
+  [ David Mohammed ]
+  * Use a more explanatory description for click-method #39 Summarise from the freedesktop explanation https://wayland.freedesktop.org/libinput/doc/latest/clickpad-softbuttons.html
+  * Update pot
+
+  [ Eric Daigle ]
+  * cc-printers-panel: don't show two Add Printer buttons at once.
+    As described in #1976, the printers panel shows two Add Printer buttons when the
+    printers list is empty. Adds a check that sets the Add Printer button in the toolbar
+    to be invisible when the empty-state page is shown (and thus the other Add Printer
+    button is visible), creating a less confusing UI.
+    Closes #1976
+
+  [ David Mohammed ]
+  * info-overview: show BUILD_ID in separate row Previously, if os-release included the BUILD_ID field, it was smushed into the OS Name row as follows:
+        OS Name                    Endless OS 5.0.0; Build ID: 220810-230009
+    This is unsightly in English; and in languages where the translations of
+    "OS Name" and "Build ID" are long, the build ID may be ellipsised and
+    hence useless:
+        Nom du système   Endless OS 5.0.0 ; (identifiant de construction ...
+        d'exploitation
+    Instead, display the build ID in a separate row, and hide it if not
+    present.
+    Origin: upstream 50a92f110d30d8e0959b20d541431813a947625e
+  * printers: Use the same sentence for "Add Printer" in button and empty-state Change the add printer button text, from the empty state section, to "Add Printer..." (previously was "Add a Printer...") so it gets consistent with the add printer button from the headerbar (in Printers panel) and with other buttons in Settings that end with ellipsis, such as the "Add Picture..." from the Appearance panel, which doesn't have the article also. Origin: upstream 53ff717b4dc8e43fa4815c2022985f96c68fb1b1
+
+  [ Marek Kasik ]
+  * printers: Show empty-state after removal of the last printer.
+    Check whether the currently removed printer was last. Also
+    check whether there are other printer being removed by CUPS
+    right now (their amount is still part of self->num_dests).
+    Do this check also in actualize_printers_list_cb() to catch
+    corner cases from timing point of view. This will handle them
+    with some delay if they show up.
+    When undone, just check whether the number of printers is higher
+    than 0 and show the printers-list page.
+    Fixes #2023
+
+  [ Matthias Clasen ]
+  * background: Allow all images.
+    The code was filtering with a small list of known
+    image mimetypes, needlessly. Just allow any
+    image/* mimetypes.
+    Fixes: #2036
+
+  [ David Mohammed ]
+  * power: Don't assert if we can't find the widget for a profile In some cases, it was possible for a profile to be set (directly, or through a hold) even though it wasn't supported. Don't assert in those cases. Origin: upstream da7b4db1627901b63439608d3700f3100e4aa9dd
+
+  [ Lubomir Rintel ]
+  * network: Fix an assertion failure.
+    Entering the Wi-Fi page without connected to a network trips an
+    assertion failure:
+      (gnome-control-center:14943): nm-CRITICAL **: 16:36:16.732: nm_access_point_get_frequency: assertion 'NM_IS_ACCESS_POINT(ap)' failed
+      Thread 1 "gnome-control-c" received signal SIGTRAP, Trace/breakpoint trap.
+      0x00007ffff7c8ee51 in g_logv () from /lib64/libglib-2.0.so.0
+      (gdb) bt
+      #0  0x00007ffff7c8ee51 in g_logv () at /lib64/libglib-2.0.so.0
+      #1  0x00007ffff7c8f0d3 in g_log () at /lib64/libglib-2.0.so.0
+      #2  0x00007ffff63b7b8a in nm_access_point_get_frequency () at /lib64/libnm.so.0
+      #3  0x00000000005965b1 in connect_details_page (self=0x4658210) at ../panels/network/connection-editor/ce-page-details.c:264
+      #4  0x0000000000597f9e in ce_page_details_new (connection=0xfbde70, device=0xd52360, ap=0x0, editor=0x50a4350) at ../panels/network/connection-editor/ce-page-details.c:570
+      #5  0x0000000000593273 in net_connection_editor_set_connection (self=0x50a4350, connection=0x7fffcc096770) at ../panels/network/connection-editor/net-connection-editor.c:522
+      #6  0x0000000000593f7d in net_connection_editor_new (connection=0x7fffcc096770, device=0xd52360, ap=0x0, client=0xd3a0c0) at ../panels/network/connection-editor/net-connection-editor.c:790
+      #7  0x0000000000582b16 in show_details_for_row (self=0xcc3040, row=0x46587b0, list=0x4273b40) at ../panels/network/net-device-wifi.c:987
+      #8  0x00007ffff7d83845 in g_cclosure_marshal_VOID__OBJECTv () at /lib64/libgobject-2.0.so.0
+      #9  0x00007ffff7da1b79 in g_signal_emit_valist () at /lib64/libgobject-2.0.so.0
+      #10 0x00007ffff7da1eb8 in g_signal_emit_by_name () at /lib64/libgobject-2.0.so.0
+      #11 0x000000000058d41f in on_row_configured_cb (self=0x4273b40, row=0x46587b0) at ../panels/network/cc-wifi-connection-list.c:251
+      #12 0x00007ffff7da1b79 in g_signal_emit_valist () at /lib64/libgobject-2.0.so.0
+      #13 0x00007ffff7da1eb8 in g_signal_emit_by_name () at /lib64/libgobject-2.0.so.0
+      #14 0x000000000058c4c4 in configure_clicked_cb (self=0x46587b0) at ../panels/network/cc-wifi-connection-row.c:513
+      #15 0x00007ffff7da1b79 in g_signal_emit_valist () at /lib64/libgobject-2.0.so.0
+      #16 0x00007ffff7da1cb3 in g_signal_emit () at /lib64/libgobject-2.0.so.0
+      ...
+
+  [ Luciano da Silva Ribas ]
+  * network: Fixed Network profiles shown on wrong device.
+    Added missing interface name during network profile creation.
+    Fixes #353
+    Fixed issues from code review
+
+  [ Alessandro Bono ]
+  * net-device-ethernet: Prevent double free.
+    Fixes: ee53bfd8b6bbbd018fdd7a2b1ea33e5a44a1b43b
+  * net-device-ethernet: Don't check device iface name.
+    If the interface name is wrong we shouldn't add the device in the first
+    place. The device comes from NM. If the interface name is wrong is a bug
+    at NM level.
+
+  [ Felipe Borges ]
+  * info: Make get_hardware_model use a hostnamed property getter.
+    This way we have a convenient way to obtain systemd-hostnamed
+    properties.
+
+  [ David Mohammed ]
+  * info-overview: Add "Kernel Version" row
+
+  [ Andy Chi ]
+  * user-account: Return duplicate notification when the finger is exist
+
+  [ David Mohammed ]
+  * Better english for the duplicate fingerprint
+
+  [ Mohammed Sadiq ]
+  * wwan: Track apn list updates
+  * wwan: Update apn list only if device is available.
+    Otherwise APN list from mobile-provider-info may not be
+    properly loaded
+  * wwan: Set apn access method before adding to list.
+    So that accessing APN details returns the right values when
+    they are inquired immediately after they are added to the list.
+
+  [ Pablo Correa Gómez ]
+  * wwan: wait for apn_list to exist to add SIM providers.
+    This avoids the situation where a duplicate entry is created if
+    Settings is started with the wwan panel disabled, a previous connection
+    exists, and the panel is later enabled.
+    Fixes #1468
+
+  [ Bastien Nocera ]
+  * info-overview: Remove "Mesa" prefix for Intel Iris driver.
+    Remove "Mesa" from the start of the device name, it's data about the
+    driver which isn't relevant to us. It's always added before the name
+    of the device in `src/gallium/drivers/iris/iris_screen.c` in mesa.
+
+  [ Felipe Borges ]
+  * thunderbolt: Hide panel if there's no thunderbolt hardware.
+    Same logic as the Wacom tablet panel.
+    Fixes #612
+  * thunderbolt: Ensure client and devices exist when setting visibility.
+    Fixes #2253
+
+  [ David Mohammed ]
+  * Latest translations, regen pot
+  * Update POT
+  * Bump version to prepare for the release
+  * Latest translations
+
+ -- Himadri Sekhar Basu <hsb10@iitbbs.ac.in>  Mon, 22 Jul 2024 01:45:32 +0530
+
 budgie-control-center (1.1.1) stable; urgency=medium
 
   [ Dirk Su ]

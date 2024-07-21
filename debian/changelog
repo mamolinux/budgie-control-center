@@ -1,3 +1,194 @@
+budgie-control-center (1.3.0) stable; urgency=medium
+
+  [ David Mohammed ]
+  * Latest translations
+  * Latest translations
+
+  [ Elliot ]
+  * Add support for switching the file manager
+
+  [ David Mohammed ]
+  * Latest translations
+  * Update POT for the latest translatables
+
+  [ Eric Daigle ]
+  * printers: Set search button/entry as sensitive when printers list is empty.
+    Currently, the search function is available when there are no printers. However, it does nothing.
+    This commit set the search button and entry as sensitive.
+    Fixes: https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/2021
+
+  [ David Mohammed ]
+  * cc-window: Don't trigger main search when pressing CTRL+S CTRL+S is reserved for the "Save" action. HIG recommends to use CTRL+F to trigger search: https://developer.gnome.org/hig/reference/keyboard.html?highlight=Find.
+    Since CTRL+F already triggers main search, this commit just removes the CTRL+S shortcut.
+
+  [ raihan2000 ]
+  * file-history:Added dialog on Clear History button - Rewrite clear_recent function to show dialog. - Added on_clear_recent_warning_response_cb function - to show warning on clicking Clear History button. This commit fixes https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1952
+
+  [ David Mohammed ]
+  * Rework cc-usage-panel.c to display dialog on history clearance
+
+  [ Marco Melorio ]
+  * sound: Don't flip the balance and fade sliders in RTL.
+    Fixes https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1067.
+
+  [ David Mohammed ]
+  * sound: Update sounds directory mtime when changing alert sound he libcanberra event-sound-cache that stores the resolved paths for sound names can get stuck with the fallback sound (bell) after trying to play an invalid symlink, such as can happen after updating to 43 which removed some sounds which might have been selected as alert sounds before.
+    Neither changing the symlink nor touching the theme directory seems to
+    invalidate that cache, but touching the sounds directory does.
+    This now updates the sounds directory mtime before triggering purging
+    the sound sample cache in the sound server via g-s-d so libcanberra will
+    load the correct sounds when repopulating the sample cache afterwards.
+  * sound: Add a "None" option to the alert chooser
+
+  [ Dylan Van Assche ]
+  * network: reapply connection on device.
+    Changing an active connection applies the changes onto the
+    NetworkManager connection, but not on the device. This is because
+    NetworkManager clones the connection when it is applied on a device.
+    This behavior is expected and documented in the NetworkManager
+    documentation [1]. To effectively apply the connection changes onto a
+    device, a reapply operation must be performed. This will make NetworkManager
+    apply the new connection onto the active device without having to
+    disable and re-enable the device.
+    Perform this reapply operation when the Apply button is pressed in the
+    Connection Editor so the changes effectively propagate to the network
+    device.
+    [1] https://networkmanager.dev/docs/api/1.32.10/gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.Reapply
+
+  [ David Mohammed ]
+  * network: add missing cancellable Add missing GCancellables to resolve the FIXME statements and avoid possible crashes if the properties in NetConnectionEditor outlive themselves.
+  * network: Init editor when secrets are missing When NetworkManager doesn't give us any secrets for a connection, the connection editor still needs to be opened. This change ensures that initialization of the editor completes even when there's an error when fetching secrets.
+  * network: Disable DNS entry if the automatic option is enabled
+
+  [ Jan Pokorný ]
+  * display: Add 32:9 to known aspect ratios.
+    Resolution dropdown previously did not show an aspect ratio hint for
+    32:9 resolutions. This adds the 32:9 aspect ratio to recognized ones.
+    Fixes #2334
+
+  [ Sundeep Anand ]
+  * keyboard: country matches should not be shown under a language name.
+    country_layouts are being appended to the layouts_with_locale which results in less relevant
+    layout groupings. for example, we if choose Hindi language which is an Indian language,
+    all Indian language layouts are shown within it - including Tamil, Bangla etc.
+    furthermore, language_layouts are also getting appended for countries where they may not
+    belong, for example, English (Ireland) is shown when we search India.
+    The layouts_with_locale table is filled as union however it yields better
+    search results if we change that to intersection.
+    Relates #2114
+
+  [ Zdenek Dohnal ]
+  * printers: Use CUPS dest API for printing test page instead CUPS IPP API.
+    The current usage of CUPS IPP API does not work for temporary queues, because the g-c-c sends the request without creating a local printer first, so the request is sent to non-existing printer.
+    If you use the destination from cupsGetNamedDest() for printing, CUPS library does the local printer creation internally and printing test page will work even for temporary queues.
+    Fixes https://bugzilla.redhat.com/show_bug.cgi?id=2148481
+
+  [ Nelson Benítez León ]
+  * user-accounts: disallow commas in real name.
+    Because real name is stored in the GECOS field of
+    /etc/passwd, which is delimited by commas that
+    cannot be escaped, the user's full name must not
+    contain a comma. More info at:
+    https://gitlab.freedesktop.org/accountsservice/accountsservice/issues/83
+    Closes #888
+  * user-accounts: close CcAvatarChooser before showing GtkFileChooser
+    so that the first click on the FileChooser is not used to just
+    close the CcAvatarChooser dialog.
+    Close issue #2315
+
+  [ Alessandro Bono ]
+  * bluetooth: Return TRUE for state-set callback.
+    From the documentation[1]: "The signal handler should return TRUE to
+    prevent the default handler from running."
+    [1] https://docs.gtk.org/gtk4/signal.Switch.state-set.html
+  * thunderbold: Don't cast CcBoltPanel when cancelled.
+    Otherwise we get a crash.
+
+  [ David Mohammed ]
+  * power: Label the main "battery" as UPS if that's what it is Change the label from "Battery" to "UPS" if the upower DisplayDevice is a UPS. This avoids confusions like: https://www.reddit.com/r/gnome/comments/11aws0q/battery_indicator_for_desktop_computer_seems/ https://askubuntu.com/questions/1344733/why-does-ubuntu-show-battery-and-charge-info-when-it-is-a-desktop-with-no-batter
+    "
+    Why does GNOME display a battery percentage ("Fully Charged") when I'm
+    running a desktop computer without any battery?
+    "
+    followed by:
+    "
+    Ha! I figured it out[...]. I have my desktop plugged into a UPS
+    "
+  * usage: Fix confirmation dialog when clearing history When clearing file history, a dialog appears saying that all files will be permanently deleted. However, this isn't true. Only the recent files list will be cleared and the files will remain intact.
+  * common: hostname-entry: Update hostname only after apply is clicked Since the entry already shows an apply button, update hostname only after the apply button is clicked.  It's not required to update hostname after every character change.
+
+  [ velsinki ]
+  * sound: Prevent duplicate sound device entries.
+    For unknown reasons, GVC mixer control can sometimes signal a new
+    device with the same id as one that was added before. This means that
+    in `device_added_cb`, a duplicate entry with that id is created, in my
+    case with a different name. However, the last one added is valid, but
+    that one cannot be selected because all other logic in the sound panel
+    assumes the first hit in `get_iter` is valid. This breaks sound input
+    selection then.
+    The fix is easy; only add a new list entry if none with that id exists.
+
+  [ David Mohammed ]
+  * Revert "common: hostname-entry: Update hostname only after apply is clicked"
+    This reverts commit d8d52d01be0b29c358f3b38b2f9e1cab28c0fe62.
+
+  [ Emilia Daria Majewska ]
+  * display: Try snapping all the displays after a config change.
+    This issue was originally addressed in !257 ("display snap after changes").
+    However it only dealt with a two-monitor setup, so the user is still
+    unable to rotate the middle display with three or more monitors.
+    This commit tries to snap the displays until all are adjacent to
+    another.
+  * display: Remove the monitor argument for cc_display_config_snap_output.
+    The function tries to snap all the outputs anyway,
+    so might as well remove the unnecessary argument.
+  * display: Removed the loop from the snapping function.
+    In all my tests, the snapping algorithm was successful on the first pass.
+
+  [ David Mohammed ]
+  *  network: Increase maximum MTU value from 10000 to 65536 The maximum MTU value of 10000 is too low for USB Ethernet, which has a maximum (for Linux USB gadgets) of 15412 bytes (although the upper limit is the USB wMaxPacketSize which goes up to 4294967295 bytes):   linux/drivers/usb/gadget/function/u_ether.c:#define GETHER_MAX_MTU_SIZE 15412.
+    Multiple Intel NICs can use an MTU of 16110 bytes:
+      linux/drivers/net/ethernet/intel/e1000/e1000_hw.h:#define MAX_JUMBO_FRAME_SIZE         0x3F00
+      linux/drivers/net/ethernet/intel/e1000e/defines.h:#define MAX_JUMBO_FRAME_SIZE    0x3F00
+      linux/drivers/net/ethernet/intel/igbvf/defines.h:#define MAX_JUMBO_FRAME_SIZE         0x3F00
+    The NetworkManager limit is 4294967295 bytes but this is unreasonable
+    in a typical enivornment because of the memory required for packets of
+    that size.
+    The maximum IPv4 and IPv6 (without using Jumbograms) packet size is 65535
+    bytes so increase the maximum MTU value to 65536 allow full size IP
+    packets to be used.
+    There is a corresponding c...
+
+  [ Ondrej Kolin ]
+  * Set last-panel only for noncrashing panels
+
+  [ Nelson Benítez León ]
+  * shell: avoid activating panel from an empty search.
+    Avoid activating a panel when doing an empty search
+    i.e. clicking ENTER without having entered
+    any text in the search entry.
+    We should do nothing in this case, we fixed it by
+    detecting for this case when an activation happens
+    when there's still no search results view in place.
+    Closes #2119
+  * shell: fix visibility check for rows and avoid empty searches.
+    When pressing ENTER (i.e. activating) a search with no
+    results ("No results found") the first Wifi panel was
+    being activating, that's wrong because cc_panel_list_activate()
+    should activate the first visible panel, but there are
+    no visible panels at the moment (No results found page is shown)
+    The problem was the visibility check in cc_panel_list_activate()
+    was incomplete and so it wrongly thought panels were app visible.
+    Part of #2119 (comments 4th and 5th)
+
+  [ David Mohammed ]
+  * Latest translations
+  * Regenerate pot
+  * Latest translations
+  * Bump release version
+
+ -- Himadri Sekhar Basu <hsb10@iitbbs.ac.in>  Mon, 22 Jul 2024 01:46:55 +0530
+
 budgie-control-center (1.2.0) stable; urgency=medium
 
   [ Campbell Jones ]

@@ -1,3 +1,43 @@
+budgie-control-center (0.3) stable; urgency=medium
+
+  [ David Mohammed ]
+  * Hide dynamic workspaces, limit number of workspaces to 8 Dynamic workspaces do not work under budgie.  Lets hide this from the UI rather than just deleting the code - this allows easier reinstatement if we subsequently want to reimplement this in budgie. Separately, limit the number of workspaces to budgie's 8 otherwise we get window manager crashes
+  * Hide lock screen notifications, do not disturb notification Lock screen notifications are not applicable with budgie-screensaver Do not disturb is handled by raven, not here.
+
+  [ Campbell Jones ]
+  * Add link to release badge and add backer badges
+  * Add FUNDING.yml
+
+  [ David Mohammed ]
+  * online-accounts: maybe leak a reference to the panel leading to a crash Fixes: https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/401 Bug-Ubuntu: https://bugs.launchpad.net/gnome-control-center/+bug/1862553
+  * Add sound overdrive capability in the sound tab. This commit leverages the Ubuntu gnome-control-center patch to enable an option to allow > 100% volume.  Stripped from this patch is the restriction to only show for the Ubuntu desktop. References to 'ubuntu' have been switched to 'budgie'.
+  * Add support for snap-store if installed to applications panel snap-store is a universal package installer. Some budgie-distros do not ship with gnome-software. Normally clicking an application allows users to open the application in gnome-software. With this patch, if snap-store is installed (and gnome-software is not installed) then the application can be optionally opened in snap-store. If both gnome-software and snap-store are not installed then the "open in software" button remains unavailable. . Patch taken from Ubuntu's G-C-C patching; its applicable to all budgie distros.
+  * keyboard: Allow disabling alternate characters key Origin: https://gitlab.gnome.org/GNOME/gnome-control-center/-/merge_requests/910 Bug-Ubuntu: https://launchpad.net/bugs/1867548 Bug-GNOME: https://gitlab.gnome.org/GNOME/gnome-control-center/issues/918
+  * keyboard: For xkb options, have "Layout default" toggle, and "None" Meant to address issues mentioned in https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1214 using the solution proposed there.
+    There is no "None" option for the compose key, since there doesn't
+    appear to be a way to disable it on the unusual layouts where it's
+    available by default.
+    XKB options are a mess, but this seems like a more accurate
+    representation of how they function.
+    Origin: https://gitlab.gnome.org/GNOME/gnome-control-center/-/merge_requests/910
+    Bug-Ubuntu: https://launchpad.net/bugs/1867548
+    Bug-GNOME: https://gitlab.gnome.org/GNOME/gnome-control-center/issues/918
+  * keyboard: Avoid modifying `xkb-options` when user changes nothing Avoids clobbering certain custom settings that can't be set in UI.
+    Origin: https://gitlab.gnome.org/GNOME/gnome-control-center/-/merge_requests/910
+    Bug-Ubuntu: https://launchpad.net/bugs/1934761
+
+  [ Joshua Strobl ]
+  * Add support for solus-sc so Solus folks don't have to patch BCC
+
+  [ David Mohammed ]
+  * Hide displays lock notification since this isnt applicable with budgie-screensaver
+  * Display lock controls need to point to the displays panel We moved the lock controls to the more logical displays in and earlier commit.  This commit ensures the signals for the lock controls point to the displays panel to ensure the signals are created and function correctly.
+  * Disable non working camera/microphones panels https://gitlab.gnome.org/GNOME/gnome-control-center/issues/381 In short, these only kind of work for sandboxed apps and its questionable whether they work here either.  Ubuntu has disabled these. So we'll inherit this patch to equally prevent confusion what these options are for.
+  * Add github templates
+  * v0.3 testing release
+
+ -- Himadri Sekhar Basu <hsb10@iitbbs.ac.in>  Mon, 22 Jul 2024 01:05:28 +0530
+
 budgie-control-center (0.2) stable; urgency=medium
 
   [ David Mohammed ]

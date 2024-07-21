@@ -1,3 +1,59 @@
+budgie-control-center (1.0.0) stable; urgency=medium
+
+  [ Aleksandr Melman ]
+  * Update Russian translation
+  * Update Russian translation
+
+  [ Sveinn í Felli ]
+  * Update Icelandic translation
+  * Update Icelandic translation
+
+  [ sicklylife ]
+  * Update Japanese translation
+  * Update Japanese translation
+  * Update Japanese translation
+
+  [ Sveinn í Felli ]
+  * Update Icelandic translation
+  * Update Icelandic translation
+  * Update Icelandic translation
+  * Update Icelandic translation
+  * Update Icelandic translation
+
+  [ Brandon Nielsen ]
+  * Simplify callback logic in ppd_selection_cb.
+    This ensures user_callback does not get called twice when cancelling out
+    of the ppd selection dialog. Fixes #1599, introduced with 179bda1b / MR: 1011.
+
+  [ sicklylife ]
+  * Update Japanese translation
+
+  [ Boyuan Yang ]
+  * Update Chinese (China) translation
+  * Update Chinese (China) translation
+
+  [ Felipe Borges ]
+  * network: Show configuration button only for active/connecting connections.
+    In commit c7bd4428399588dc777cdca45f5f415f37cfec66 we started to
+    show the configuration button for all rows, which fixes the original
+    issue of not being able to tweak a connection during association but
+    also introduces a regression of not having connection data to show
+    for other connections in the list. This way, the configuration
+    button will fail to create a net_connection_editor interface for
+    rows that aren't associated with an active connection.
+    Let's only show the configuration button when the NMActiveConnectionState
+    is either NM_ACTIVE_CONNECTION_STATE_ACTIVATING or
+    NM_ACTIVE_CONNECTION_STATE_ACTIVATED.
+    Fixes #1494
+
+  [ David Mohammed ]
+  * applications: Set the Icon key in desktop file to a icon that exists While we dynamically append --symbolic to the icons while creating the sidebar model in https://gitlab.gnome.org/GNOME/gnome-control-center/-/blob/master/shell/cc-shell-model.c#L270 There are automation tools (such as rpmdiff) that parse desktop files and verify whether their Icon= matches to an existing file in the icon theme package.
+    preferences-desktop-apps doesn't exist in adwaita-icon-theme but
+    preferences-desktop-apps-symbolic does.
+  * Bump release version
+
+ -- Himadri Sekhar Basu <hsb10@iitbbs.ac.in>  Mon, 22 Jul 2024 01:26:52 +0530
+
 budgie-control-center (0.4) stable; urgency=medium
 
   [ David Mohammed ]
